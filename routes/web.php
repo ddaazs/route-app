@@ -17,6 +17,15 @@ Route::name('cars.')->group(function (){
     Route::get('cars/{id}',[CarController::class,'show'])->name('show');
     Route::put('cars/{id}',[CarController::class,'update'])->name('update');
     Route::delete('cars/{id}',[CarController::class,'destroy'])->name('destroy');
-})->middleware('auth');
+})->middleware(Authenticate::class);
+
+// Route::resource('cars',CarController::class,['index','create','store','update','edit','destroy'])->middleware('auth');
+
+/* Route group via controller
+Route::controller(CarController::class)->group(function (){
+    Route::get('cars','index')->name('cars.index');
+    Route::get('cars/create','create')->name('cars.create');
+});
+*/
 
 Route::get('/',[DashboardController::class,'index']);

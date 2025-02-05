@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Car</title>
+
+        <link href="https://bootswatch.com/5/sketchy/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+    </head>
+<body>
+    @if (count($cars) == 0)
+    <div>There are no cars in the database now.</div>
+    <div>Create a new car?</div>
+    <a href="{{ route('cars.create') }}">Click</a>
+@else
+    <table class='table mx-1 mt-3'>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Car Name</th>
+                <th>Created Year</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($cars as $car)
+                <tr>
+                    <td>{{ $car->id }}</td>
+                    <td>{{ $car->car_name }}</td>
+                    <td>{{ $car->created_year }}</td>
+                    <td>
+                        <form action="{{ route('cars.destroy', $car->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Delete</button>
+                        </form>
+                        <a href="{{ route('cars.show', $car->id) }}"><button type="button">Show</button></a>
+                        <a href="{{ route('cars.edit', $car->id) }}"><button type="button">Edit</button></a>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <div>Create a new car?</div>
+    <a href="{{ route('cars.create') }}">Click</a>
+@endif
+
+</body>
+</html>

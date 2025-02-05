@@ -2,16 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Routing\Controller;
 use App\Models\Car;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 class CarController extends Controller
 {
 
+    public function __construct() {
+        // $this->middleware('auth');
+        // $this->middleware('log')->only('index');
+
+    }
     public function index()
     {
         $car = new Car;
-        return view('car',['cars' => $car->all()]);
+        return view('car.car',['cars' => $car->all()]);
     }
 
     /**

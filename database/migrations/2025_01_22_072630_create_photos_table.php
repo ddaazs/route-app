@@ -6,18 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    protected $table='photo';
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('cars', function (Blueprint $table) {
+        Schema::create('photos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("photo_id")->nullable()->constrained("photos")->onDelete('cascade');
-            $table->string("car_name");
-            $table->date("created_year");
-            $table->softDeletes();
+            $table->string('name');
+            $table->integer('size');
+            $table->string('saved_at');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cars');
+        Schema::dropIfExists('photos');
     }
 };

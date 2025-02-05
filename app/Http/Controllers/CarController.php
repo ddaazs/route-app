@@ -4,21 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use App\Models\Car;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 class CarController extends Controller
 {
-
-    public function __construct() {
+    public function __construct()
+    {
         // $this->middleware('auth');
         // $this->middleware('log')->only('index');
-
     }
     public function index()
     {
-        $car = new Car;
-        return view('car.car',['cars' => $car->all()]);
+        $show = DB::table('cars')->paginate(15);
+        return view('car.car', ['cars' => $show]);
     }
 
     /**
@@ -35,10 +35,32 @@ class CarController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'car_name' => 'required|string|max:255' ,
+            'car_name' => 'required|string|max:255',
             'created_year' => 'required|date',
+            'photos' => 'nullable|array',
+            'photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        Car::create($request->all());
+
+        $car = Car::create([
+            'car_name' => $request->car_name,
+            'created_year' => $request->created_year,
+        ]);
+
+        if ($request->hasFile('photos')) {
+                foreach ($request->file('photos') as $photo) {
+                    if ($photo->isValid()) {
+                    $name = $photo->getClientOriginalName();
+                    $path = $photo->store('photos', 'public');
+                    $size = $photo->getSize();
+                    Photo::create([
+                        'car_id' => $car->id,
+                        'name' => $name,
+                        'size' => $size,
+                        'saved_at' => $path,
+                    ]);
+                }
+            }
+        }
         return redirect()->route('cars.index')->with('success', 'Car added successfully!');
     }
 
@@ -47,7 +69,6 @@ class CarController extends Controller
      */
     public function show(string $id)
     {
-
         $car = Car::findOrFail($id);
         return view('car.show', compact('car'));
     }
@@ -66,8 +87,6 @@ class CarController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        Log::info('Updating car with ID: ' . $id, $request->all());
-
         $request->validate([
             'car_name' => 'required|string|max:255',
             'created_year' => 'required|date',

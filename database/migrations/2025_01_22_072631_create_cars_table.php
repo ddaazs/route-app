@@ -14,7 +14,6 @@ return new class extends Migration
     {
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("photo_id")->nullable()->constrained("photos")->onDelete('cascade');
             $table->string("car_name");
             $table->date("created_year");
             $table->softDeletes();

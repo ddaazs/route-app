@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId("car_id")->constrained("cars")->onDelete('cascade');
             $table->string('name');
             $table->integer('size');
             $table->string('saved_at');

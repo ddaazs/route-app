@@ -14,8 +14,8 @@ class Car extends Model
         'car_name',
         'created_year',
     ];
-    public function photo(): HasMany
+    public function photos(): HasMany
     {
-        return $this->hasMany(Photo::class, 'foreign_key', 'local_key');
+        return $this->hasMany(Photo::class);
     }
 }

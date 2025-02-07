@@ -58,7 +58,7 @@
                         <input type="submit" name="submit" class="btn btn-dark btn-md" value="submit">
                     </div>
                     <div class="mt-2 text-right">
-                        <a href="/register" class="text-dark">Register here</a>
+                        <a href={{ route('register') }} class="text-dark">Register here</a>
                     </div>
                 </form>
             </div>

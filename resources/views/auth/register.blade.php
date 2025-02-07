@@ -61,7 +61,7 @@
                         <input type="submit" name="submit" class="btn btn-dark btn-md" value="submit">
                     </div>
                     <div class="mt-2 text-right">
-                        <a href="/login" class="text-dark">Login here</a>
+                        <a href="{{ route('login') }}" class="text-dark">Login here</a>
                     </div>
                 </form>
             </div>

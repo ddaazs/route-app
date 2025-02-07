@@ -8,6 +8,7 @@ use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 class CarController extends Controller
 {
     public function __construct()
@@ -42,8 +43,8 @@ class CarController extends Controller
         ]);
 
         $car = Car::create([
-            'car_name' => $request->car_name,
-            'created_year' => $request->created_year,
+            'car_name' => $request->input('car_name'),
+            'created_year' => $request->input('created_year'),
         ]);
 
         if ($request->hasFile('photos')) {
@@ -104,8 +105,17 @@ class CarController extends Controller
     public function destroy(string $id)
     {
         $car = Car::findOrFail($id);
+        foreach ($car->photos as $photo) {
+            Storage::disk('public')->delete($photo->saved_at);
+            $photo->delete();
+        }
         $car->delete();
-
         return redirect()->route('cars.index')->with('success', 'Car deleted successfully!');
     }
+
+
+    // public function countPhoto(){
+    //     $car = DB::table('car')->count('photo');
+    //     return route('cars.index',compact($car));
+    // }
 }

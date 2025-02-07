@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use App\Models\Car;
+use Illuminate\Support\Facades\DB;
 
 class PhotoController extends Controller
 {
@@ -61,6 +62,8 @@ class PhotoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // $photo = Photo::findOrFail($id);
+        // $photo->delete();
+        // return redirect()->route('cars.edit', $photo->car_id)->with('success', 'Photo deleted successfully!');
     }
 }

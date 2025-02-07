@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Car</title>
 
     <link href="https://bootswatch.com/5/sketchy/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
@@ -32,23 +31,27 @@
             </thead>
             <tbody>
                 @foreach ($cars as $car)
+                    @if ($car->deleted_at !== null)
+                        @continue
+                    @else
                     <tr>
                         <td>{{ $car->id }}</td>
                         <td>{{ $car->car_name }}</td>
                         <td>{{ $car->created_year }}</td>
                         <td>
-
+                           {{-- {{ route('cars.count') }} --}}
                         </td>
                         <td>
-                            <form action="{{ route('cars.destroy', $car->id) }}" method="POST" style="display:inline;">
+                            <a href="{{ route('cars.show', $car->id) }}" class="btn btn-info">Show</a>
+                            <a href="{{ route('cars.edit', $car->id) }}" class="btn btn-warning">Edit</a>
+                            <form action="{{ route('cars.destroy', $car->id) }}" method="post" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit">Delete</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
-                            <a href="{{ route('cars.show', $car->id) }}"><button type="button">Show</button></a>
-                            <a href="{{ route('cars.edit', $car->id) }}"><button type="button">Edit</button></a>
                         </td>
                     </tr>
+                    @endif
                 @endforeach
             </tbody>
         </table>

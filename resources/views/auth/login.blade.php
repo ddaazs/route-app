@@ -51,8 +51,11 @@
                     </div>
                     <div class="mt-3 form-group">
                         <label for="password" class="text-dark">Password:</label><br>
-                        <input type="text" name="password" id="password" class="form-control">
+                        <input type="password" name="password" id="password" class="form-control">
                     </div>
+                    @error('email','password')
+                        <div class="mt-2 text-danger">{{ $message }}</div>
+                    @enderror
                     <div class="form-group">
                         <label for="remember-me" class="text-dark"></label><br>
                         <input type="submit" name="submit" class="btn btn-dark btn-md" value="submit">

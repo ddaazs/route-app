@@ -5,17 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -29,7 +22,19 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'email' => 'email|required',
+            'password' => 'required',
+        ]);
+        if(Auth::attempt($validate)){
+            $request->session()->regenerate();
+            return redirect()->intended(route('cars.index'));
+        }
+        else
+        return back()->withErrors([
+            'email' => 'Email or password is incorrect',
+            'password' => 'Email or password is incorrect',
+        ]);
     }
 
     /**
@@ -37,7 +42,7 @@ class LoginController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**
@@ -59,8 +64,12 @@ class LoginController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy()
     {
-        //
+        Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        return redirect()->route('login');
     }
 }

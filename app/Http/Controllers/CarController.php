@@ -41,15 +41,14 @@ class CarController extends Controller
             'photos' => 'nullable|array',
             'photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
         $car = Car::create([
             'car_name' => $request->input('car_name'),
-            'created_year' => $request->input('created_year'),
+            'created_year' => date('Y', strtotime($request->input('created_year'))),
         ]);
 
         if ($request->hasFile('photos')) {
-                foreach ($request->file('photos') as $photo) {
-                    if ($photo->isValid()) {
+            foreach ($request->file('photos') as $photo) {
+                if ($photo->isValid()) {
                     $name = $photo->getClientOriginalName();
                     $path = $photo->store('photos', 'public');
                     $size = $photo->getSize();
@@ -94,7 +93,21 @@ class CarController extends Controller
         ]);
 
         $car = Car::findOrFail($id);
-
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                if ($photo->isValid()) {
+                    $name = $photo->getClientOriginalName();
+                    $path = $photo->store('photos', 'public');
+                    $size = $photo->getSize();
+                    Photo::create([
+                        'car_id' => $car->id,
+                        'name' => $name,
+                        'size' => $size,
+                        'saved_at' => $path,
+                    ]);
+                }
+            }
+        }
         $car->update($request->only(['car_name', 'created_year']));
         return redirect()->route('cars.index')->with('success', 'Car updated successfully!');
     }
@@ -113,9 +126,9 @@ class CarController extends Controller
         return redirect()->route('cars.index')->with('success', 'Car deleted successfully!');
     }
 
-
-    // public function countPhoto(){
-    //     $car = DB::table('car')->count('photo');
-    //     return route('cars.index',compact($car));
-    // }
+    public function countPhoto(String $id){
+        $car = Car::findOrFail($id);
+        $photo = $car->photos->count();
+        return view('car.count_photos',compact('photo'));
+    }
 }

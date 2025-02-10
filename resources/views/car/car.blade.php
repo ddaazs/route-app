@@ -17,7 +17,7 @@
     @if (count($cars) == 0)
         <div>There are no cars in the database now.</div>
         <div>Create a new car?</div>
-        <a href="{{ route('cars.create') }}">Click</a>
+        <a href="{{ route('cars.create') }}">Add car</a>
     @else
         <table class='table mx-1 mt-3'>
             <thead>
@@ -34,32 +34,36 @@
                     @if ($car->deleted_at !== null)
                         @continue
                     @else
-                    <tr>
-                        <td>{{ $car->id }}</td>
-                        <td>{{ $car->car_name }}</td>
-                        <td>{{ $car->created_year }}</td>
-                        <td>
-                           {{-- {{ route('cars.count') }} --}}
-                        </td>
-                        <td>
-                            <a href="{{ route('cars.show', $car->id) }}" class="btn btn-info">Show</a>
-                            <a href="{{ route('cars.edit', $car->id) }}" class="btn btn-warning">Edit</a>
-                            <form action="{{ route('cars.destroy', $car->id) }}" method="post" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>{{ $car->id }}</td>
+                            <td>{{ $car->car_name }}</td>
+                            <td>{{ $car->created_year }}</td>
+                            <td>
+                                {{-- {{ route('photos.count',$car->id) }} --}}
+                            </td>
+                            <td>
+                                <a href="{{ route('cars.show', $car->id) }}" class="btn btn-info">Show</a>
+                                <a href="{{ route('cars.edit', $car->id) }}" class="btn btn-warning">Edit</a>
+                                <form action="{{ route('cars.destroy', $car->id) }}" method="post"
+                                    style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
                     @endif
                 @endforeach
             </tbody>
         </table>
         {{ $cars->links() }}
-        <div>Create a new car?</div>
-        <button onclick="window.location='{{ route('cars.create') }}'">Click</button>
+        <div>Create a new car?
+        <button onclick="window.location='{{ route('cars.create') }}'">Add car</button>
+    </div>
     @endif
-
+    <div class="mx-2 mt-3">
+        <a class="button" href="{{ route('welcome') }}">Back to home</a>
+    </div>
 </body>
 
 </html>

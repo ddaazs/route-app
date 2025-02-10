@@ -23,13 +23,13 @@
          </div>
          <div class="mt-2 input-group-text">
              <label for="created_year">Created Year:</label>
-             <input class="mx-2" type="date" id="created_year" name="created_year">
+             <input class="mx-2" type="date"  id="created_year" name="created_year">
          </div>
          <div class="mt-2 input-group-text">
             <label for="photo">Photo:</label>
             <input class="border ms-5" type="file" id="photos" name="photos[]" multiple>
         </div>
-         <div class="input-group btn">
+         <div class="mx-3 mt-2 input-group-btn">
              <button type="submit">add</button>
              <button type="button" onclick="window.location='{{ route('cars.index') }}'">back</button>
          </div>

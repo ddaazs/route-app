@@ -14,4 +14,7 @@ class UserController extends Controller
             'user' => User::findOrFail($id)
         ]);
     }
+
+    public function store(Request $request){
+    }
 }

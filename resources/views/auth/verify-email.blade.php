@@ -15,7 +15,6 @@
     </form>
     @else
         <p>Verification email has been sent</p>
-    @endif
     <p>Don't see your mail?</p>
     <form action="{{ route('verification.resend') }}" method="post">
         @csrf
@@ -27,5 +26,6 @@
             Cancel
         </button>
     </form>
+    @endif
 </body>
 </html>

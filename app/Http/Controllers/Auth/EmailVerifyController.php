@@ -14,7 +14,7 @@ class EmailVerifyController extends Controller
     }
     public function verify(EmailVerificationRequest $request){
         $request->fulfill();
-        return redirect()->route('welcome');
+        return redirect()->route('welcome')->with('status','email verified');
     }
 
     public function send(Request $request){

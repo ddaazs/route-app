@@ -13,7 +13,8 @@ use App\Http\Controllers\Admin\DashboardController as Admin;
 use App\Http\Controllers\Auth\EmailVerifyController;
 use App\Http\Controllers\PostController;
 
-function streamedContent(): Generator {
+function streamedContent(): Generator
+{
     yield 'Hello, ';
     yield 'World!';
 }
@@ -21,6 +22,8 @@ function streamedContent(): Generator {
 Route::get('/', function () {
     return view('welcome');
 });
+
+//Car
 Route::middleware(['auth', 'verified'])
     ->name('cars.')
     ->group(function () {
@@ -37,13 +40,13 @@ Route::middleware('guest')->group(function () {
     Route::get('/google', [ResponseController::class, 'google'])->name('google');
     // Route::delete('cars.photos', [PhotoController::class, 'deletePhoto'])->name('cars.deletePhoto');
 });
-
 Route::get('/user/{id}', [UserController::class, 'show'])->middleware('auth');
 
 // Route::resources(['cars'=>CarController::class,
 //                     'photos'=>PhotoController::class,]);
-
 // Route::resource('cars', CarController::class)->middleware('auth');
+
+//Login
 Route::middleware('guest')->group(function () {
     Route::get('login', [LoginController::class, 'create'])->name('login');
     Route::post('login', [LoginController::class, 'store'])->name('login.log');
@@ -51,14 +54,16 @@ Route::middleware('guest')->group(function () {
     Route::post('register', [RegisterController::class, 'store'])->name('register.store');
 });
 
+//Post
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('profile/{user}', [UserController::class, 'show'])->name('profile');
-    Route::resource('cars.photos', PhotoController::class)->shallow()->names([]);
-    Route::get('post',[PostController::class,'index'])->name('posts.index');
-
+    Route::get('post', [PostController::class, 'index'])->name('posts.index');
+    Route::post('post',[PostController::class,'store'])->name('posts.store');
+    Route::delete('post/{post}',[PostController::class,'destroy'])->name('posts.destroy');
 });
 
-Route::middleware(['auth', 'verified','auth.session'])
+//Response
+Route::middleware(['auth', 'verified', 'auth.session'])
     ->name('response.')
     ->group(function () {
         Route::get('response/gg', [ResponseController::class, 'google'])->name('google');
@@ -68,30 +73,33 @@ Route::middleware(['auth', 'verified','auth.session'])
         Route::get('response/controller', [ResponseController::class, 'controllerCalled'])->name('controller');
         Route::get('response/download', [ResponseController::class, 'download'])->name('download');
         Route::get('response/readfile', [ResponseController::class, 'readfile'])->name('readfile');
-        Route::get('caps', function() {
+        Route::get('caps', function () {
             return response()->caps('hello world');
         })->name('caps');
-        Route::get('response/stream',[ResponseController::class,'responseStream'])->name('stream');
+        Route::get('response/stream', [ResponseController::class, 'responseStream'])->name('stream');
         Route::get('/stream', function () {
-            return response()->stream(function (): void {
-                foreach (streamedContent() as $chunk) {
-                    echo $chunk;
-                    ob_flush();
-                    flush();
-                    sleep(5); // Simulate delay between chunks...
-                }
-            }, 200, ['X-Accel-Buffering' => 'no']);
+            return response()->stream(
+                function (): void {
+                    foreach (streamedContent() as $chunk) {
+                        echo $chunk;
+                        ob_flush();
+                        flush();
+                        sleep(5); // Simulate delay between chunks...
+                    }
+                },
+                200,
+                ['X-Accel-Buffering' => 'no'],
+            );
         })->name('resStream');
     });
 
-    Route::middleware(['auth','admin'])->group(function(){
-        Route::get('admin/dashboard',[Admin::class,'index'])->name('admin.dashboard');
-    });
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('admin/dashboard', [Admin::class, 'index'])->name('admin.dashboard');
+});
 
-    Route::middleware(['auth'])->group(function(){
-        Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
-
-    });
+Route::middleware(['auth'])->group(function () {
+    Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
+});
 /* Route group via controller
 Route::controller(CarController::class)->group(function (){
     Route::get('cars','index')->name('cars.index');
@@ -100,12 +108,15 @@ Route::controller(CarController::class)->group(function (){
 */
 Route::middleware(['auth'])
     ->name('verification.')
-    ->group(function(){
-    Route::post('email/send',[EmailVerifyController::class,'send'])->middleware('throttle:6,1')->name('send');
-    Route::get('email/verify', [EmailVerifyController::class,'show'])->name('notice');
-    Route::get('email/verify/{id}/{hash}',[EmailVerifyController::class,'verify'])->name('verify');
-    Route::post('email/resend',[EmailVerifyController::class,'resend'])->middleware('throttle:6,1')->name('resend');
-});
-
+    ->group(function () {
+        Route::post('email/send', [EmailVerifyController::class, 'send'])
+            ->middleware('throttle:6,1')
+            ->name('send');
+        Route::get('email/verify', [EmailVerifyController::class, 'show'])->name('notice');
+        Route::get('email/verify/{id}/{hash}', [EmailVerifyController::class, 'verify'])->name('verify');
+        Route::post('email/resend', [EmailVerifyController::class, 'resend'])
+            ->middleware('throttle:6,1')
+            ->name('resend');
+    });
 
 Route::get('/', [DashboardController::class, 'index'])->name('welcome');

@@ -2,17 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use App\Models\Post;
+use App\Services\PostService;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    public $postService;
+    public function __construct(PostService $postService) {
+        $this->postService = $postService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('post.posts');
+        $posts = $this->postService->getPost();
+        return view('post.post',compact('posts'));
     }
 
     /**
@@ -20,15 +27,20 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        //
+        $post = $this->postService->savePost($request);
+
+        if($post){
+            return back()->with('success','Post created successfully');
+        }
+        return back()->with('error','Something went wrong');
     }
 
     /**
@@ -52,7 +64,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+
     }
 
     /**
@@ -60,6 +72,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post = $this->postService->deletePost($post);
+        if($post){
+            return back()->with('success','Post deleted successfully');
+        }
+        return back()->with('error','Something went wrong');
     }
 }

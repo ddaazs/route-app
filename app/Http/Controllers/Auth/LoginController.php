@@ -26,15 +26,16 @@ class LoginController extends Controller
             'email' => 'email|required',
             'password' => 'required',
         ]);
-        if(Auth::attempt($validate)){
+        if(Auth::attempt($validate,true)){
             $request->session()->regenerate();
-            return redirect()->intended(route('cars.index'));
+            if(auth()->user()->email_verified_at == null){
+                return redirect()->route('verification.notice');
+            }
+            return redirect()->intended(route('welcome'));
         }
-        else
         return back()->withErrors([
-            'email' => 'Email or password is incorrect',
-            'password' => 'Email or password is incorrect',
-        ]);
+            'incorrect' => 'Email or password is incorrect',
+        ])->onlyInput('email');
     }
 
     /**

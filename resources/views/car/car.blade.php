@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    @include('car.alert')
     @if (count($cars) == 0)
         <div>There are no cars in the database now.</div>
         <div>Create a new car?</div>
@@ -38,9 +39,7 @@
                             <td>{{ $car->id }}</td>
                             <td>{{ $car->car_name }}</td>
                             <td>{{ $car->created_year }}</td>
-                            <td>
-                                {{-- {{ route('photos.count',$car->id) }} --}}
-                            </td>
+                            <td>{{ $car->photos_count }} photos</td>
                             <td>
                                 <a href="{{ route('cars.show', $car->id) }}" class="btn btn-info">Show</a>
                                 <a href="{{ route('cars.edit', $car->id) }}" class="btn btn-warning">Edit</a>
@@ -63,6 +62,8 @@
     @endif
     <div class="mx-2 mt-3">
         <a class="button" href="{{ route('welcome') }}">Back to home</a>
+        <a class="button" href="{{ route('response.index') }}">Response index</a>
+
     </div>
 </body>
 

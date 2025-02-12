@@ -53,7 +53,7 @@
                         <label for="password" class="text-dark">Password:</label><br>
                         <input type="password" name="password" id="password" class="form-control">
                     </div>
-                    @error('email','password')
+                    @error('incorrect')
                         <div class="mt-2 text-danger">{{ $message }}</div>
                     @enderror
                     <div class="form-group">

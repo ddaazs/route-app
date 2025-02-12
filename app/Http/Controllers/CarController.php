@@ -18,8 +18,9 @@ class CarController extends Controller
     }
     public function index()
     {
-        $show = DB::table('cars')->paginate(15);
-        return view('car.car', ['cars' => $show]);
+        $show = Car::withCount('photos')->paginate(15);
+
+        return response()->view('car.car', ['cars' => $show]);
     }
 
     /**
@@ -35,7 +36,7 @@ class CarController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validate = $request->validate([
             'car_name' => 'required|string|max:255',
             'created_year' => 'required|date',
             'photos' => 'nullable|array',
@@ -108,7 +109,7 @@ class CarController extends Controller
                 }
             }
         }
-        $car->update($request->only(['car_name', 'created_year']));
+        $car->update($request->only(['car_name', 'created_year' => date('Y', strtotime($request->input('created_year')))]));
         return redirect()->route('cars.index')->with('success', 'Car updated successfully!');
     }
 
@@ -124,11 +125,5 @@ class CarController extends Controller
         }
         $car->delete();
         return redirect()->route('cars.index')->with('success', 'Car deleted successfully!');
-    }
-
-    public function countPhoto(String $id){
-        $car = Car::findOrFail($id);
-        $photo = $car->photos->count();
-        return view('car.count_photos',compact('photo'));
     }
 }

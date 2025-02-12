@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Route::pattern('id','^[0-9]+');
         Paginator::useBootstrapFive();
-        Response::macro('caps', function ($value){
+        Response::macro('caps', function (string $value){
             return Response::make(strtoupper($value));
         });
     }

@@ -36,7 +36,6 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
         $post = $this->postService->savePost($request);
-
         if($post){
             return back()->with('success','Post created successfully');
         }
@@ -48,7 +47,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        $post = $this->postService->getPostById($post);
+        return view('post.show',compact('post'));
     }
 
     /**
@@ -56,15 +56,21 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        $post = $this->postService->getPostById($post);
+        $editing = true;
+        return view('post.show',compact('post','editing'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request,Post $post)
     {
-
+        $post = $this->postService->updatePost($request,$post);
+        if($post){
+            return back()->with('success','Post updated successfully');
+        }
+        return back()->with('error','Something went wrong');
     }
 
     /**

@@ -59,7 +59,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('profile/{user}', [UserController::class, 'show'])->name('profile');
     Route::get('post', [PostController::class, 'index'])->name('posts.index');
     Route::post('post',[PostController::class,'store'])->name('posts.store');
+    Route::get('post/{post}',[PostController::class,'show'])->name('post.show');
     Route::delete('post/{post}',[PostController::class,'destroy'])->name('posts.destroy');
+    Route::get('post/{post}/edit',[PostController::class,'edit'])->name('post.edit');
+    Route::put('post/{post}', [PostController::class,'update'])->name('post.update');
 });
 
 //Response
@@ -106,6 +109,7 @@ Route::controller(CarController::class)->group(function (){
     Route::get('cars/create','create')->name('cars.create');
 });
 */
+
 Route::middleware(['auth'])
     ->name('verification.')
     ->group(function () {

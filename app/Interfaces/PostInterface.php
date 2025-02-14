@@ -9,4 +9,8 @@ interface PostInterface
     public function savePost($request);
 
     public function deletePost($post);
+
+    public function getPostById($post);
+
+    public function updatePost($request,$post);
 }

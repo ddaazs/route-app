@@ -30,6 +30,15 @@ class PostService
     public function deletePost($post){
         return $this->postInterface->deletePost($post);
     }
+
+    public function getPostById($post){
+        return $this->postInterface->getPostById($post);
+    }
+
+    public function updatePost($request,$post){
+        $posts = ['content' => $request->content];
+        return $this->postInterface->updatePost($posts,$post);
+    }
 }
 
 ?>

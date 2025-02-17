@@ -11,3 +11,9 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif
+{{-- <div class="alert alert-danger">
+    <span class="alert-title">{{ $title ?? 'Alert' }}</span>
+    <div>
+        {{ $slot }}
+    </div>
+</div> --}}

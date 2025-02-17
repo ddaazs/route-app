@@ -47,4 +47,19 @@ class ResponseController extends Controller
         },'stream.txt');
     }
 
+    public function stream(){
+        return response()->stream(
+            function (): void {
+                foreach (streamedContent() as $chunk) {
+                    echo $chunk;
+                    ob_flush();
+                    flush();
+                    sleep(5); // Simulate delay between chunks...
+                }
+            },
+            200,
+            ['X-Accel-Buffering' => 'no'],
+        );
+    }
+
 }

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Photo extends Model
 {
     use HasFactory;
+        public $timestamps = false;
         protected $fillable =[
         'car_id',
         'name',

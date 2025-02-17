@@ -25,4 +25,10 @@ class PostRequest extends FormRequest
             'content' => 'required|string',
         ];
     }
+
+    public function messages(){
+        return [
+            'content.required' => 'Please enter content',
+        ];
+    }
 }

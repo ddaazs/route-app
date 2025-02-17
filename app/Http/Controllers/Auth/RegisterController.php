@@ -29,7 +29,6 @@ class RegisterController extends Controller
             'password' => 'required|confirmed|min:6',
         ]);
 
-
         User::create([
             'name' => $validate['name'],
             'email' => $validate['email'],

@@ -21,6 +21,5 @@ class EnsureUserIsAdmin
             abort(403);
         }
         return $next($request);
-
     }
 }

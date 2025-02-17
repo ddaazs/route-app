@@ -11,6 +11,7 @@ use App\Http\Controllers\PhotoCount;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as Admin;
 use App\Http\Controllers\Auth\EmailVerifyController;
+use App\Http\Controllers\BladeController;
 use App\Http\Controllers\PostController;
 
 function streamedContent(): Generator
@@ -80,21 +81,14 @@ Route::middleware(['auth', 'verified', 'auth.session'])
             return response()->caps('hello world');
         })->name('caps');
         Route::get('response/stream', [ResponseController::class, 'responseStream'])->name('stream');
-        Route::get('/stream', function () {
-            return response()->stream(
-                function (): void {
-                    foreach (streamedContent() as $chunk) {
-                        echo $chunk;
-                        ob_flush();
-                        flush();
-                        sleep(5); // Simulate delay between chunks...
-                    }
-                },
-                200,
-                ['X-Accel-Buffering' => 'no'],
-            );
-        })->name('resStream');
+        Route::get('/stream', [ResponseController::class,'stream'])->name('resStream');
     });
+
+//Blade
+Route::middleware(['auth','verified'])->group(function(){
+    Route::get('blade',[BladeController::class,'index'])->name('blade.index');
+    Route::get('blade/show',[BladeController::class,'show'])->name('blade.show');
+});
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/dashboard', [Admin::class, 'index'])->name('admin.dashboard');

@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    @include('car.alert')
+    <x-alert />
     @if (count($cars) == 0)
         <div>There are no cars in the database now.</div>
         <div>Create a new car?</div>
@@ -66,5 +66,4 @@
 
     </div>
 </body>
-
 </html>

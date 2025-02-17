@@ -64,13 +64,15 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,Post $post)
+    public function update(PostRequest $request,Post $post)
     {
         $post = $this->postService->updatePost($request,$post);
         if($post){
             return back()->with('success','Post updated successfully');
         }
-        return back()->with('error','Something went wrong');
+        else{
+            return back()->with('error','Something went wrong');
+        }
     }
 
     /**

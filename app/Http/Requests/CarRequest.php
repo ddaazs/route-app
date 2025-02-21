@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Post;
-use App\Models\User;
-use App\Rules\Uppercase;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\File;
 
-class PostRequest extends FormRequest
+class CarRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,13 +23,16 @@ class PostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content' => ['bail','required','string',new Uppercase],
+            'car_name' => 'required|string|max:255',
+            'created_year' => "required|date_format:Y|max:2025",
+            'photos' => 'nullable|array',
+            'photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ];
+    }
+    public function messages(){
+        return[
+            'car_name.string'=>'Car name include alphabet,number only'
         ];
     }
 
-    public function messages(){
-        return [
-            'content.required' => 'Please enter content',
-        ];
-    }
 }

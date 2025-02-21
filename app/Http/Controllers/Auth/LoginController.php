@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Auth\Events\Login;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Password;
 
 class LoginController extends Controller
 {
@@ -20,31 +21,26 @@ class LoginController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(LoginRequest $request)
     {
-        $validate = $request->validate([
-            'email' => 'email|required',
-            'password' => 'required',
-        ]);
-        if(Auth::attempt($validate,true)){
+        if (Auth::attempt($request->all(), true)) {
             $request->session()->regenerate();
-            if(auth()->user()->email_verified_at == null){
+            if (Auth::user()->email_verified_at == null) {
                 return redirect()->route('verification.notice');
             }
             return redirect()->intended(route('welcome'));
         }
-        return back()->withErrors([
-            'incorrect' => 'Email or password is incorrect',
-        ])->onlyInput('email');
+        return back()
+            ->withErrors([
+                'incorrect' => 'Email or password is incorrect',
+            ])
+            ->onlyInput('email');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-
-    }
+    public function show(string $id) {}
 
     /**
      * Show the form for editing the specified resource.

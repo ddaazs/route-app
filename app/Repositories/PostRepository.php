@@ -16,7 +16,7 @@ class PostRepository implements PostInterface
     }
 
     public function getPost(){
-        return Post::all();
+        return Post::cursorPaginate(3);
     }
 
     public function savePost($postRequest){

@@ -24,7 +24,7 @@
          </div>
          <div class="mt-2 input-group-text">
              <label for="created_year">Created Year:</label>
-             <input class="mx-2" type="date"  id="created_year" name="created_year">
+             <input class="mx-2" type="number" min="1950" max="3000" placeholder="YYYY" id="created_year" name="created_year">
          </div>
          <div class="mt-2 input-group-text">
             <label for="photo">Photo:</label>

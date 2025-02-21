@@ -6,11 +6,14 @@ use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
     public $postService;
-    public function __construct(PostService $postService) {
+    public function __construct(PostService $postService)
+    {
         $this->postService = $postService;
     }
     /**
@@ -19,16 +22,13 @@ class PostController extends Controller
     public function index()
     {
         $posts = $this->postService->getPost();
-        return view('post.post',compact('posts'));
+        return view('post.post', compact('posts'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -36,10 +36,10 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
         $post = $this->postService->savePost($request);
-        if($post){
-            return back()->with('success','Post created successfully');
+        if ($post) {
+            return back()->with('success', 'Post created successfully');
         }
-        return back()->with('error','Something went wrong');
+        return redirect()->route('posts.index')->with('error', 'Something went wrong');
     }
 
     /**
@@ -48,7 +48,7 @@ class PostController extends Controller
     public function show(Post $post)
     {
         $post = $this->postService->getPostById($post);
-        return view('post.show',compact('post'));
+        return view('post.show', compact('post'));
     }
 
     /**
@@ -56,22 +56,26 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        $post = $this->postService->getPostById($post);
-        $editing = true;
-        return view('post.show',compact('post','editing'));
+        Gate::authorize('edit', $post);
+        // $response = Gate::inspect('edit', $post);
+        // if ($response->allowed()) {
+            $post = $this->postService->getPostById($post);
+            $editing = true;
+            return view('post.show', compact('post', 'editing'));
+        // }
+        // else {
+        //     $response->message();
+        // }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(PostRequest $request,Post $post)
+    public function update(PostRequest $request, Post $post)
     {
-        $post = $this->postService->updatePost($request,$post);
-        if($post){
-            return back()->with('success','Post updated successfully');
-        }
-        else{
-            return back()->with('error','Something went wrong');
+        $post = $this->postService->updatePost($request, $post);
+        if ($post) {
+            return back()->with('success', 'Post updated successfully');
         }
     }
 
@@ -81,9 +85,9 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post = $this->postService->deletePost($post);
-        if($post){
-            return back()->with('success','Post deleted successfully');
+        if ($post) {
+            return back()->with('success', 'Post deleted successfully');
         }
-        return back()->with('error','Something went wrong');
+        return redirect()->route('posts.index')->with('error', 'Something went wrong');
     }
 }

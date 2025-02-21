@@ -21,9 +21,7 @@
             <x-layouts.sidebar />
             <div class="col-6">
                 <x-alert />
-
                 @yield('content')
-
             </div>
             <div class="col-3">
                 @include('post.layouts.search')
@@ -36,4 +34,5 @@
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
     </script>
 </body>
+
 </html>

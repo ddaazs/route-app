@@ -3,12 +3,16 @@
 namespace App\Providers;
 
 use App\Interfaces\PostInterface;
+use App\Models\Post;
+use App\Models\User;
+use App\Policies\PostPolicy;
 use App\Repositories\PostRepository;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Gate;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -31,5 +35,6 @@ class AppServiceProvider extends ServiceProvider
         Response::macro('caps', function (string $value){
             return Response::make(strtoupper($value));
         });
+        Gate::policy(Post::class,PostPolicy::class);
     }
 }

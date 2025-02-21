@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CarRequest;
 use Illuminate\Routing\Controller;
 use App\Models\Car;
 use App\Models\Photo;
@@ -9,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+
 class CarController extends Controller
 {
     public function __construct()
@@ -34,17 +37,11 @@ class CarController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CarRequest $request)
     {
-        $validate = $request->validate([
-            'car_name' => 'required|string|max:255',
-            'created_year' => 'required|date',
-            'photos' => 'nullable|array',
-            'photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
         $car = Car::create([
-            'car_name' => $request->input('car_name'),
-            'created_year' => date('Y', strtotime($request->input('created_year'))),
+            'car_name' => $request->car_name,
+            'created_year' => $request->created_year,
         ]);
 
         if ($request->hasFile('photos')) {
@@ -86,13 +83,9 @@ class CarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CarRequest $request, string $id)
     {
-        $request->validate([
-            'car_name' => 'required|string|max:255',
-            'created_year' => 'required|date',
-        ]);
-
+        $validate = $request->validated();
         $car = Car::findOrFail($id);
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {

@@ -47,6 +47,14 @@
         <x-section class="mb-24" >
             This is section
           </x-section>
+
+          {!! $text = '<div>
+            <h1>Tiêu đề Bài Viết</h1>
+        </div>' !!}
+
+        {{  $text = '<div>
+            <h1>Tiêu đề Bài Viết</h1>
+        </div>'  }}
     </body>
 
     </html>

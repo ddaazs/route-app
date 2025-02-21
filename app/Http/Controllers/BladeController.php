@@ -12,9 +12,7 @@ class BladeController extends Controller
     {
         $users = Auth::user();
 
-        return view('blade', ['user' => $users])->with(['active' => 'active']);
-
-        // return view('blade');
+        return view('blade',['user'=>$users]);
     }
 
     public function show()

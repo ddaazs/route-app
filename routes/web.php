@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as Admin;
 use App\Http\Controllers\Auth\EmailVerifyController;
 use App\Http\Controllers\BladeController;
+use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\PostController;
 
 function streamedContent(): Generator
@@ -88,6 +89,7 @@ Route::middleware(['auth', 'verified', 'auth.session'])
 Route::middleware(['auth','verified'])->group(function(){
     Route::get('blade',[BladeController::class,'index'])->name('blade.index');
     Route::get('blade/show',[BladeController::class,'show'])->name('blade.show');
+    Route::get('exercise',[ExerciseController::class,'index'])->name('exe.index');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
